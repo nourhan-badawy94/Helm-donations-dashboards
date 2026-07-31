@@ -545,7 +545,7 @@ function render(data){
     const collectedRounded = Math.round(d.collected).toLocaleString('en-US');
     const goalRounded = Math.round(d.goal).toLocaleString('en-US');
     const numsHtml = d.unit
-      ? `<b style="color:${icon.color1}">${collectedRounded}/${goalRounded}</b> ${d.unit}`
+      ? `<b style="color:${icon.color1}">${goalRounded}/${collectedRounded}</b> ${d.unit}`
       : `<b style="color:${icon.color1}">${collectedRounded}</b> من ${goalRounded}`;
     const noteHtml = d.donationTotal
       ? `<div class="card-note"><b>إجمالي التبرعات:</b> ${Math.round(d.donationTotal).toLocaleString('en-US')} جنيه</div>`
