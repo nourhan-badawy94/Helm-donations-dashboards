@@ -44,7 +44,7 @@
     padding-bottom:32px;
     margin-bottom:44px;
   }
-  .hero-left{ display:flex; align-items:center; gap:18px; }
+  .hero-left{ display:flex; flex-direction:row-reverse; align-items:center; gap:18px; }
   .logo-img{ height:120px; width:auto; }
   .eyebrow{
     font-family:var(--font-body);
@@ -237,7 +237,7 @@ const KNOWN_KEYWORDS = {
   category: ["categor", "فئة", "الفئة", "نشاط", "النشاط"],
   collected: ["collect", "current", "raised", "محصل", "تم جمعه", "الكمية", "الحالى", "الحالي"],
   goal: ["goal", "target", "الهدف", "المطلوب", "متوقع"],
-  unit: ["unit"],
+  unit: ["unit", "القياس"],
   donationTotal: ["اجمالى", "إجمالى", "اجمالي", "إجمالي", "التبرعات", "donation"],
   show: ["show", "ظهور", "اظهار", "إظهار"],
 };
@@ -539,12 +539,16 @@ function render(data){
     const fillPct = Math.max(0, Math.min(displayPct, 100));
     const isFull = d.collected >= d.goal && d.goal > 0;
     const isLow = d.goal > 0 && displayPct < 30;
-    const unitLabel = d.unit ? ` ${d.unit}` : "";
     const icon = pickIcon(d.category);
     const displayCategory = d.category;
     const uid = 'g' + i;
+    const collectedRounded = Math.round(d.collected).toLocaleString('en-US');
+    const goalRounded = Math.round(d.goal).toLocaleString('en-US');
+    const numsHtml = d.unit
+      ? `<b style="color:${icon.color1}">${collectedRounded}/${goalRounded}</b> ${d.unit}`
+      : `<b style="color:${icon.color1}">${collectedRounded}</b> من ${goalRounded}`;
     const noteHtml = d.donationTotal
-      ? `<div class="card-note"><b>إجمالي التبرعات:</b> ${d.donationTotal.toLocaleString('en-US')} جنيه</div>`
+      ? `<div class="card-note"><b>إجمالي التبرعات:</b> ${Math.round(d.donationTotal).toLocaleString('en-US')} جنيه</div>`
       : (d.extra ? `<div class="card-note"><b>${d.extra.label}:</b> ${d.extra.value}</div>` : "");
 
     const card = document.createElement('div');
@@ -554,7 +558,7 @@ function render(data){
       <div class="gauge">${ringSvg(icon.icon, uid, icon.color1, icon.color2)}</div>
       <div class="card-body">
         <div class="card-cat">${displayCategory}</div>
-        <div class="card-nums"><b style="color:${icon.color1}">${d.collected.toLocaleString('en-US')}</b>${unitLabel} من ${d.goal.toLocaleString('en-US')}${unitLabel}</div>
+        <div class="card-nums">${numsHtml}</div>
         ${noteHtml}
         <div class="bar-track"><div class="bar-fill" style="width:0%; background:linear-gradient(90deg, ${icon.color1}, ${icon.color2})"></div></div>
         <div class="pct-row">
